@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+
 import { LocalStorageService } from '../local-storage.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-home',
@@ -14,9 +18,14 @@ export class HomeComponent implements OnInit {
   nameRegex = /^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$/;
   emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]{1,4}$/;
   // ends here ~ regex
+
+  loginForm = []
+  loginEmail = '';
+  loginPassword = '';
+
   
-    // confirm password validator
-    confirmPasswordValidation(c: AbstractControl): any {
+  // confirm password validator
+  confirmPasswordValidation(c: AbstractControl): any {
   		if(!c.parent || !c) return;
 	    const pwd = c.parent.get('password');
 	    const cpwd = c.parent.get('confirmPassword');
@@ -27,7 +36,7 @@ export class HomeComponent implements OnInit {
 	};
 	// ends here ~ confirm password validator
 
-  constructor(private _localStorageService: LocalStorageService) {
+  constructor(private _localStorageService: LocalStorageService, private http:HttpClient, private router: Router) {
   }
 
   ngOnInit() {
@@ -66,12 +75,22 @@ export class HomeComponent implements OnInit {
   get confirmPassword() { return this.signupForm.get('confirmPassword') }
   // ends here ~ get values for show validation error
   
-  // function on submit form
+  // user registration function on submit form
   userRegistration(formData) {
   	const signupFormData = this.signupForm.value;
   	this._localStorageService.signup(signupFormData.fullName,signupFormData.email,signupFormData.password);
   }
-  // ends here ~ function on submit form
+  // ends here ~ user registration function on submit form
+
+  // user Login function on submit login form
+  userLogin = (formData) => {
+    this._localStorageService.login(formData.loginEmail,formData.loginPassword,(callbackData)=>{
+      if(callbackData) {
+        this.router.navigate(['/dashboard'])
+      }
+    })
+  } 
+  // ends here ~ user Login function on submit login form
 
 
 }

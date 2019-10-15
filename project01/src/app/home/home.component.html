@@ -12,7 +12,51 @@
 <div class="tab-content">
   <div class="tab-pane container active" id="login">
   	<!-- login form -->
+  	<form #loginForm="ngForm" class="formSignup" (ngSubmit)="userLogin(loginForm)">
+  		<div class="form-group">
+		  <label for="email">Email</label>
+		  <input type="text" class="form-control" [(ngModel)]="loginForm.loginEmail" name="loginEmail" #loginEmail="ngModel" pattern="[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]{1,4}" [maxlength]="50" required>
+
+		    <!-- show error for loginEmail -->
+	  		   <div *ngIf="loginEmail.invalid && (loginEmail.dirty || loginEmail.touched)" class="alert alert-danger">
+				  <div *ngIf="loginEmail.errors.required">
+				    Email is required.
+				  </div>
+				  <div *ngIf="loginEmail.errors.maxlength">
+				    Email must be not exceeds 50 characters.
+				  </div>
+				  <div *ngIf="loginEmail.errors.pattern">
+			    	Email is Invalid. Please Provide Valid Email Address.
+				  </div>
+				</div>
+		  	<!-- ends here ~ show error for loginEmail -->
+
+		</div>
+
+		<div class="form-group">
+		  <label for="loginPassword">Password</label>
+		  <input type="password" class="form-control" [(ngModel)]="loginForm.loginPassword" name="loginPassword" #loginPassword="ngModel" [minlength]="8" [maxlength]="30" required>
+
+		  <!-- show error for loginPassword -->
+  		   <div *ngIf="loginPassword.invalid && (loginPassword.dirty || loginPassword.touched)" class="alert alert-danger">
+			  <div *ngIf="loginPassword.errors.required">
+			    Password is required.
+			  </div>
+			  <div *ngIf="loginPassword.errors.maxlength">
+			    Password must be not exceeds 50 characters.
+			  </div>
+			  <div *ngIf="loginPassword.errors.minlength">
+		    	Password must be at least contains 8 characters.
+			  </div>
+			</div>
+		  	<!-- ends here ~ show error for loginEmail -->
+		</div>
+
+	  <button class="btn btn-primary" class="form-control" [disabled]="!loginForm.valid">Login</button>
+
+  	</form>
   	<!-- ends here ~ login form -->
+
   </div>
   <div class="tab-pane container fade" id="signup">
   	
