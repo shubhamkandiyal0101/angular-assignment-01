@@ -22,6 +22,7 @@ export class HomeComponent implements OnInit {
   loginForm = []
   loginEmail = '';
   loginPassword = '';
+  isUserLoggedIn: boolean = false;
 
   
   // confirm password validator
@@ -37,6 +38,14 @@ export class HomeComponent implements OnInit {
 	// ends here ~ confirm password validator
 
   constructor(private _localStorageService: LocalStorageService, private http:HttpClient, private router: Router) {
+      // get user details on load
+      this._localStorageService.getProfileAllDetails((serviceResp)=>{
+        if(serviceResp != false) {
+            this.isUserLoggedIn = true;
+            this.router.navigate(['/dashboard'])
+        }
+      })
+      // ends here ~ get user details on load
   }
 
   ngOnInit() {
@@ -79,6 +88,14 @@ export class HomeComponent implements OnInit {
   userRegistration(formData) {
   	const signupFormData = this.signupForm.value;
   	this._localStorageService.signup(signupFormData.fullName,signupFormData.email,signupFormData.password);
+    
+    // login user on signup
+    this._localStorageService.login(signupFormData.email,signupFormData.password,(callbackData)=>{
+      if(callbackData) {
+        this.router.navigate(['/dashboard'])
+      }
+    })
+    // ends here ~ login user on signup
   }
   // ends here ~ user registration function on submit form
 

@@ -6,7 +6,12 @@
    <div class="collapse navbar-collapse justify-content-between" id="nav">
       <ul class="navbar-nav">
          <li class="nav-item" >
-            <a class="nav-link text-light font-weight-bold px-3" href="#">HOME</a>
+            <a class="nav-link text-light font-weight-bold px-3" href="/">HOME</a>
+         </li>
+      </ul>
+      <ul class="navbar-nav" style="float: right;">
+         <li style="background-color: red; border-radius: 5px;" *ngIf="isUserLoggedIn == true">
+            <a class="nav-link text-light font-weight-bold px-3" (click)="logoutUser()">Logout</a>
          </li>
       </ul>
    </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalStorageService } from '../local-storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -7,12 +8,17 @@ import { LocalStorageService } from '../local-storage.service';
   styleUrls: ['./user-dashboard.component.css']
 })
 export class UserDashboardComponent implements OnInit {
-
-  constructor(private _localStorageService:LocalStorageService) {
+  userFullname: string;
+  
+  constructor(private _localStorageService:LocalStorageService, private router: Router) {
 
   	// get user details on load
   	this._localStorageService.getProfileAllDetails((serviceResp)=>{
-  		console.log('serviceResp >> ',serviceResp)
+  		if(serviceResp == false) {
+        this.router.navigate(['/']);
+      } else {
+        this.userFullname = serviceResp.fullname;
+      }
   	})
   	// ends here ~ get user details on load
 

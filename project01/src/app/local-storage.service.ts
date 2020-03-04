@@ -80,17 +80,12 @@ export class LocalStorageService {
   getProfileAllDetails(callback) {
       const userProfileDetail = localStorage.getItem('loggedInUser')
 
-      
+
       if(userProfileDetail != '' && userProfileDetail != undefined && userProfileDetail != null) {
         // if any data exists
         const userProfileArray = JSON.parse(userProfileDetail) // array data get from localstorage
-
-        if(userProfileArray.length == 1) {
-            callback(userProfileArray)
-        } else {
-            callback(false)
-        }
-            
+        callback(userProfileArray)
+          
        } else {
            callback(false)
        }
