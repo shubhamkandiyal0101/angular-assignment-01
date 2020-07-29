@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { LocalStorageService } from '../local-storage.service';
 import { Router } from '@angular/router';
-
+import { HttpService } from 'src/app/services/http.service';
 
 @Component({
   selector: 'app-home',
@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
 	};
 	// ends here ~ confirm password validator
 
-  constructor(private _localStorageService: LocalStorageService, private http:HttpClient, private router: Router) {
+  constructor(private _httpService:HttpService, private _localStorageService: LocalStorageService, private http:HttpClient, private router: Router) {
       // get user details on load
       this._localStorageService.getProfileAllDetails((serviceResp)=>{
         if(serviceResp != false) {
@@ -86,26 +86,50 @@ export class HomeComponent implements OnInit {
   
   // user registration function on submit form
   userRegistration(formData) {
-  	const signupFormData = this.signupForm.value;
-  	this._localStorageService.signup(signupFormData.fullName,signupFormData.email,signupFormData.password);
-    
-    // login user on signup
-    this._localStorageService.login(signupFormData.email,signupFormData.password,(callbackData)=>{
-      if(callbackData) {
-        this.router.navigate(['/dashboard'])
-      }
+  	let signupFormData = this.signupForm.value;
+    delete signupFormData['confirmPassword'];
+
+    // backend call
+    this._httpService.post('/api/signup', signupFormData).subscribe((resp)=>{
+      console.log(' response >> ',resp);
+    },(err)=>{
+      console.log(' error >> ',err);
     })
+    // ends here ~ backend call
+
+  	// this._localStorageService.signup(signupFormData.fullName,signupFormData.email,signupFormData.password);
+    
+   //  // login user on signup
+   //  this._localStorageService.login(signupFormData.email,signupFormData.password,(callbackData)=>{
+   //    if(callbackData) {
+   //      this.router.navigate(['/dashboard'])
+   //    }
+   //  })
     // ends here ~ login user on signup
   }
   // ends here ~ user registration function on submit form
 
   // user Login function on submit login form
   userLogin = (formData) => {
-    this._localStorageService.login(formData.loginEmail,formData.loginPassword,(callbackData)=>{
-      if(callbackData) {
-        this.router.navigate(['/dashboard'])
-      }
+
+    const payload = {
+      'email':formData.loginEmail,
+      'password':formData.loginPassword
+    }
+
+    // backend call
+    this._httpService.post('/api/login', payload).subscribe((resp)=>{
+      console.log(' response >> ',resp);
+    },(err)=>{
+      console.log(' error >> ',err);
     })
+    // ends here ~ backend call
+
+    // this._localStorageService.login(formData.loginEmail,formData.loginPassword,(callbackData)=>{
+    //   if(callbackData) {
+    //     this.router.navigate(['/dashboard'])
+    //   }
+    // })
   } 
   // ends here ~ user Login function on submit login form
 
