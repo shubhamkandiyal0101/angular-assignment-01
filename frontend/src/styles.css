@@ -1,2 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~bootstrap/dist/css/bootstrap.min.css';
+/*@import '~bootstrap/dist/css/bootstrap.min.css';*/
+@import './tailwind.css';
+@import '~ngx-toastr/toastr';
+
+/*@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;*/
+/*"node_modules/bootstrap/dist/css/bootstrap.min.css"*/
+/*"node_modules/jquery/dist/jquery.min.js",*/
+/*"node_modules/bootstrap/dist/js/bootstrap.min.js"*/
