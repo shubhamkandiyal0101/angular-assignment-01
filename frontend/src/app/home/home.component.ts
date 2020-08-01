@@ -21,12 +21,12 @@ export class HomeComponent implements OnInit {
 
   constructor(private _httpService:HttpService, private _localStorageService: LocalStorageService, private http:HttpClient, private router: Router) {
       // get user details on load
-      this._localStorageService.getProfileAllDetails((serviceResp)=>{
-        if(serviceResp != false) {
-            this.isUserLoggedIn = true;
-            this.router.navigate(['/dashboard'])
-        }
-      })
+      // this._localStorageService.getProfileAllDetails((serviceResp)=>{
+      //   if(serviceResp != false) {
+      //       this.isUserLoggedIn = true;
+      //       this.router.navigate(['/dashboard'])
+      //   }
+      // })
       // ends here ~ get user details on load
   }
 

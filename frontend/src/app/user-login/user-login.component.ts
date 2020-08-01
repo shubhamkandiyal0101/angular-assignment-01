@@ -27,7 +27,17 @@ export class UserLoginComponent implements OnInit {
   loginPassword = '';
   // ends here ~ form
 
-  constructor(private _httpService:HttpService, private _localStorageService: LocalStorageService, private http:HttpClient, private router: Router, private toastr: ToastrService) { }
+  constructor(private _httpService:HttpService, private _localStorageService: LocalStorageService, private http:HttpClient, private router: Router, private toastr: ToastrService) {
+
+      // check user is already logged in or not
+      const userToken = this._localStorageService.getItem('token');
+      if(userToken['message-type'] == 'success' && userToken['data'] != '') {
+        this.router.navigate(['/dashboard']);
+      }
+      // ends here ~ check user is already logged in or not
+
+
+  }
 
   ngOnInit() {
 
@@ -47,9 +57,19 @@ export class UserLoginComponent implements OnInit {
 
     // backend call
     this._httpService.post('/api/login', payload).subscribe((resp:any)=>{
-      if(resp.status == 200) {
-      	this.toastr.success(resp.body.message,'Success');
-      }
+
+      console.log(' >> resp >> ',resp);
+
+      // if(resp.status == 200) {
+        const respBody = resp.body;
+        this.toastr.success(respBody.message,'Success');
+
+        const token = respBody.data.token;
+      	this._localStorageService.storeItem('token',token);
+
+        this.router.navigate(['/dashboard']);
+
+      // }
     },(err:any)=>{
       	this.toastr.error(err.error.message,'Error');
     })

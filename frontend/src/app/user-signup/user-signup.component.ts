@@ -20,7 +20,16 @@ export class UserSignupComponent implements OnInit {
   	// ends here ~ regex
 
 
-  constructor(private _httpService:HttpService, private _localStorageService: LocalStorageService, private http:HttpClient, private router: Router, private toastr: ToastrService) { }
+  constructor(private _httpService:HttpService, private _localStorageService: LocalStorageService, private http:HttpClient, private router: Router, private toastr: ToastrService) {
+
+      // check user is already logged in or not
+      const userToken = this._localStorageService.getItem('token');
+      if(userToken['message-type'] == 'success' && userToken['data'] != '') {
+        this.router.navigate(['/dashboard']);
+      }
+      // ends here ~ check user is already logged in or not
+
+  }
 
   ngOnInit() {
   }

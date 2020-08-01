@@ -2,8 +2,17 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const commonModels = require('../models/common-models');
 const mongoose = require('mongoose');
-
+const path = require('path');
+const fs = require('fs'); 
+const crypto = require('crypto');
 const saltRounds = 10;
+
+require('dotenv').config();
+
+
+// for JWT
+const { JWK: { None, generateSync, asKey }, JWT, JWS } = require('jose')
+// ends here ~ for JWT
 
 // COMMON FUNCTION
 
@@ -132,16 +141,51 @@ exports.login = async function(req,res,next){
 	const isAuthUser = await isEncrptionMatch(password,userDetail.password);
 
 	if(isAuthUser) {
+
+		// user object
+		const userObj = {
+			"_id":userDetail._id,
+			"name":userDetail.name,
+			"email":userDetail.email
+		}
+		// ends here ~ user object
+
+		const userToken = JWT.sign(
+		  userObj,
+			process.env.JWT_SECRET_KEY,  
+		  {
+		    expiresIn: '1 hour',
+		    header: {
+		      typ: 'JWT'
+		    }
+		  }
+		)
+
 		res.status(200).json({
 			'message-type':'success',
-			'message':'Successfully Login into Account'
+			'message':'Successfully Login into Account',
+			'data':{
+				'token':userToken
+			}
 		})	
 	} else {
-		
+		return res.status(404).json({
+			'message-type':'error',
+			'message':'Please Provide Correct Message. Its seems like You are Entering Incorrect Password'
+		})
 	}
 
 	
 }
-
-
 // ends here ~ for login
+
+exports.fetchUserDetails = (req,res,next) => {
+	return res.status(200).json({
+		'message-type':'success',
+		'message':'Fetch User Login Details',
+		'data':{
+			'user':req.user
+		}
+		
+	})
+}

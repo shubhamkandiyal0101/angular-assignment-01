@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -14,6 +14,7 @@ import { LocalStorageService } from './local-storage.service';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { UserLoginComponent } from './user-login/user-login.component';
 import { UserSignupComponent } from './user-signup/user-signup.component';
+import { ApiTokenInterceptor } from 'src/app/shared/interceptor/api-token.interceptor';
 
 
 @NgModule({
@@ -44,7 +45,12 @@ import { UserSignupComponent } from './user-signup/user-signup.component';
     })
   ],
   providers: [
-    LocalStorageService
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ApiTokenInterceptor,
+      multi: true
+    },
+    LocalStorageService,
   ],
   bootstrap: [AppComponent]
 })

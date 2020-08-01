@@ -33,5 +33,14 @@ export class HttpService {
   }
   // ends here ~ post request
 
+  // get request
+  get(url: string): Observable<object> {
+    let options = { headers: this.httpHeaders };
+    options["observe"] = "response";
+
+    return this.http.get(url, options);
+  }
+  // ends here ~ get request
+
 
 }
