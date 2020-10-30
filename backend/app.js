@@ -9,7 +9,8 @@ console.log(process.env.as)
 const webRoutes = require('./routes/web_home.js');
 
 // connect database
-MONGO_URI = 'mongodb://localhost:27017/mean_db';
+// MONGO_URI = 'mongodb://localhost:27017/mean_db';
+MONGO_URI = 'mongodb://mymongodb:27017/mean_db';
 mongoose.connect(MONGO_URI).then(() => {
 console.log("Connected to Database");
 }).catch((err) => {

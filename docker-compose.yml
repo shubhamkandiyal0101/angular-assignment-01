@@ -1,0 +1,22 @@
+version: "3"
+services:
+  mymongodb:
+    image: "mongo"
+    ports:
+      - "27017:27017"
+
+  mynode:
+    build: ./backend/
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mymongodb
+
+  myangular:
+    build: ./frontend/
+    ports:
+      - "4200:4200"
+    depends_on:
+      - mynode
+    # volumes:
+    #   - /var/www/angular_assignment/frontend:/var/www/angular_assignment/frontend
